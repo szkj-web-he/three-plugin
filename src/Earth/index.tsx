@@ -1,16 +1,22 @@
-import { GUI } from 'dat.gui';
 import React, { useEffect, useRef } from 'react';
+
+import atmos from './Assets/earth_atmos_2048.jpg';
+import specular from './Assets/earth_specular_2048.jpg';
+import normal from './Assets/earth_normal_2048.jpg';
 
 import {
     Scene,
     PerspectiveCamera,
     WebGLRenderer,
-    BoxGeometry,
+    SphereGeometry,
     MeshPhongMaterial,
+    TextureLoader,
     Mesh,
+    DirectionalLight,
     Color,
-    PointLight,
+    Vector2,
 } from 'three';
+import { OrbitControls } from '~/Unit/OrbitControls';
 
 const Earth = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
@@ -19,51 +25,75 @@ const Earth = () => {
         const node = ref.current;
         if (!node) return;
         let timer: number | null = null;
-        const renderer = new WebGLRenderer({ canvas: node });
+        let timerOut: number | null = null;
+
+        const radius = 6371;
 
         const bg = new Color('rgb(0, 0, 0)');
 
-        const geometry = new BoxGeometry();
-        const material = new MeshPhongMaterial({ color: 0x00ffff });
+        const geometry = new SphereGeometry(radius, 100, 50);
+        const loader = new TextureLoader();
+
+        const material = new MeshPhongMaterial({
+            specular: 0xe6e6e6,
+            shininess: 15,
+            map: loader.load(atmos),
+            specularMap: loader.load(specular),
+            normalMap: loader.load(normal),
+
+            normalScale: new Vector2(0.85, -0.85),
+        });
         const cube = new Mesh(geometry, material);
 
         const scene = new Scene();
 
-        const w = Math.floor(node.clientWidth);
-        const h = Math.floor(node.clientHeight);
+        let rect = node.parentElement?.getBoundingClientRect();
+        let w = Math.floor(rect?.width || 0);
+        let h = Math.floor(rect?.height || 0);
 
-        renderer.setSize(w, h);
-        const camera = new PerspectiveCamera(75, w / h, 0.1, 1000);
+        const camera = new PerspectiveCamera(25, w / h, 50, 1e7);
 
-        const light = new PointLight();
-
-        light.position.set(0, 0, 5);
-        scene.add(light);
-        const gui = new GUI();
-
-        const cameraFolder = gui.addFolder('PointLight');
-        cameraFolder.add(light.position, 'x', 0, 10);
-        cameraFolder.add(light.position, 'y', 0, 10);
-        cameraFolder.add(light.position, 'z', 0, 10);
-
-        cameraFolder.open();
-        // scene.add(lights[1]);
-        // scene.add(lights[2]);
+        const dirLight = new DirectionalLight(0xffffff);
+        dirLight.position.set(-1, 0, 1).normalize();
+        scene.add(dirLight);
 
         scene.add(cube);
 
-        camera.position.z = 5;
+        camera.position.z = radius * 5;
 
+        const controls = new OrbitControls(camera, node);
+
+        controls.update();
+
+        const renderer = new WebGLRenderer({ canvas: node });
+        renderer.setSize(w, h);
         renderer.setClearColor(bg, 0);
 
         const animate = () => {
             timer = window.requestAnimationFrame(animate);
+
+            controls.update();
 
             cube.rotation.x += 0.005;
             cube.rotation.y += 0.005;
 
             renderer.render(scene, camera);
         };
+        const resizeFn = () => {
+            timer && window.cancelAnimationFrame(timer);
+            timerOut && window.clearTimeout(timerOut);
+            timerOut = window.setTimeout(() => {
+                rect = node.parentElement?.getBoundingClientRect();
+                w = Math.floor(rect?.width || 0);
+                h = Math.floor(rect?.height || 0);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                renderer.setSize(w, h);
+                animate();
+            }, 17);
+        };
+        window.addEventListener('resize', resizeFn, false);
+
         animate();
         return () => {
             timer && window.cancelAnimationFrame(timer);
