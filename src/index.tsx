@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { listenToParentIPC, render } from './boilerplate';
 import './normalize.scss';
 import './font.scss';
@@ -18,22 +18,22 @@ const tabData = [
     },
     {
         title: 'Axial Mouse Interaction',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./AxialMouseInteraction')),
         id: 3,
     },
     {
         title: 'Basic Maze',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./BasicMaze')),
         id: 4,
     },
     {
         title: 'Gravity Maze',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./GravityMaze')),
         id: 5,
     },
     {
         title: 'Die',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./Die')),
         id: 6,
     },
     {
@@ -63,7 +63,38 @@ const Main: React.FC = () => {
         title: string;
         element: React.LazyExoticComponent<() => JSX.Element>;
         id: number;
-    }>(tabData[0]);
+    }>();
+
+    useLayoutEffect(() => {
+        let data: {
+            title: string;
+            element: React.LazyExoticComponent<() => JSX.Element>;
+            id: number;
+        };
+        if (window.location.search.includes('?')) {
+            const paramStr = window.location.search.split('?')[1];
+            const arr = paramStr.includes('&') ? paramStr.split('&') : [paramStr];
+            const json: Record<string, string> = {};
+            for (let i = 0; i < arr.length; i++) {
+                const item = arr[i].split('=');
+                json[item[0]] = item[1];
+            }
+            const id = Number(json.id);
+
+            data = tabData.find((item) => item.id === id) ?? { ...tabData[0] };
+        } else {
+            data = { ...tabData[0] };
+        }
+        setSelectData({ ...data });
+    }, []);
+
+    useEffect(() => {
+        if (selectData) {
+            window.history.pushState({}, '', `?id=${selectData?.id}`);
+        }
+    }, [selectData]);
+
+    if (!selectData) return <>加载中....</>;
 
     const Temp = selectData.element;
 

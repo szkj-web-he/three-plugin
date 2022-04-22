@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import atmos from './Assets/earth_atmos_2048.jpg';
 import specular from './Assets/earth_specular_2048.jpg';
@@ -14,9 +14,10 @@ import {
     Mesh,
     DirectionalLight,
     Color,
+    AmbientLight,
     Vector2,
 } from 'three';
-import { OrbitControls } from '~/Unit/OrbitControls';
+import { OrbitControls } from '../Unit/OrbitControls';
 
 const Earth = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
@@ -56,6 +57,9 @@ const Earth = () => {
         const dirLight = new DirectionalLight(0xffffff);
         dirLight.position.set(-1, 0, 1).normalize();
         scene.add(dirLight);
+
+        const light = new AmbientLight(0xffffff, 0.5); // soft white light
+        scene.add(light);
 
         scene.add(cube);
 
@@ -97,10 +101,15 @@ const Earth = () => {
         animate();
         return () => {
             timer && window.cancelAnimationFrame(timer);
+            timerOut && window.clearTimeout(timerOut);
             renderer.clear();
             geometry.dispose();
             material.dispose();
+            controls.dispose();
             cube.removeFromParent();
+            scene.removeFromParent();
+            window.removeEventListener('resize', resizeFn, false);
+            renderer.dispose();
         };
     }, []);
 

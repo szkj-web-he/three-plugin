@@ -7,6 +7,7 @@ import {
     MeshPhongMaterial,
     Mesh,
     Color,
+    AxesHelper,
     PointLight,
 } from 'three';
 import { OrbitControls } from '../Unit/OrbitControls';
@@ -28,6 +29,7 @@ const Temp = () => {
         const material = new MeshPhongMaterial({ color: 0x00ffff });
         //加载材料
         const cube = new Mesh(geometry, material);
+
         //创建场景
         const scene = new Scene();
         let rect = node.parentElement?.getBoundingClientRect();
@@ -36,7 +38,7 @@ const Temp = () => {
 
         renderer.setSize(w, h);
         //创建相机
-        const camera = new PerspectiveCamera(75, w / h, 0.1, 1000);
+        const camera = new PerspectiveCamera(75, w / h, 0.1, 3000);
 
         const controls = new OrbitControls(camera, node);
 
@@ -57,6 +59,11 @@ const Temp = () => {
 
         scene.add(cube);
 
+        const axesHelper = new AxesHelper(5);
+        scene.add(axesHelper);
+
+        camera.position.x = 3;
+        camera.rotation.y = 45 * 2 * Math.PI;
         camera.position.z = 5;
 
         renderer.setClearColor(bg, 0);
@@ -66,7 +73,6 @@ const Temp = () => {
             controls.update();
             cube.rotation.x += 0.005;
             cube.rotation.y += 0.005;
-
             renderer.render(scene, camera);
         };
 
@@ -88,15 +94,14 @@ const Temp = () => {
         return () => {
             timer && window.cancelAnimationFrame(timer);
             timerOut && window.clearTimeout(timerOut);
-            renderer.clear();
             geometry.dispose();
             material.dispose();
-            camera.removeFromParent();
             cube.removeFromParent();
             scene.removeFromParent();
+            camera.removeFromParent();
+            controls.dispose();
             window.removeEventListener('resize', resizeFn, false);
             renderer.dispose();
-            controls.dispose();
         };
     }, []);
 
