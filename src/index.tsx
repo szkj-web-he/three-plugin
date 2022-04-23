@@ -38,7 +38,7 @@ const tabData = [
     },
     {
         title: 'Tomography',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./Tomography')),
         id: 7,
     },
     {

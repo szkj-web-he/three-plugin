@@ -12,10 +12,12 @@ import {
     BufferGeometry,
 } from 'three';
 
-import { STLLoader } from '../Unit/STLLoader.js';
-
-import die_stl from './Assets/die.stl';
+import die_stl from '../Die/Assets/die.stl';
 import { OrbitControls } from '../Unit/OrbitControls';
+import { helper } from '../Unit/helper';
+import { computeTomography } from './Unit/computeTomography';
+import { BinarySTL } from '../Unit/binary';
+import { fetchFileBuffer } from '~/Unit/fetchFileBuffer';
 
 const Temp = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
@@ -35,8 +37,6 @@ const Temp = () => {
         renderer.outputEncoding = sRGBEncoding;
         // 创建图形
         let geometry: null | BufferGeometry = null;
-        // 加载STL的loader
-        const loader = new STLLoader();
         // 创建相机
         const camera = new PerspectiveCamera(75, w / h, 0.1, 1000);
         // 轨迹控制器
@@ -52,15 +52,12 @@ const Temp = () => {
         //创建场景
         const scene = new Scene();
 
+        helper(camera, scene);
         renderer.setSize(w, h);
 
         const animate = () => {
-            if (!cube) return;
-
             timer = window.requestAnimationFrame(animate);
             controls.update();
-            cube.rotation.x += 0.005;
-            cube.rotation.y += 0.005;
 
             renderer.render(scene, camera);
         };
@@ -83,20 +80,20 @@ const Temp = () => {
             //创建背景色
             const bg = new Color('rgb(0, 0, 0)');
 
-            await new Promise((resolve) => {
-                loader.load(die_stl, (res) => {
-                    resolve(res);
-                });
-            }).then((res) => {
-                geometry = res as BufferGeometry;
+            const stl = new BinarySTL(await fetchFileBuffer(die_stl));
+            //创建
+
+            geometry = stl.asGeometry().center();
+            cube = new Mesh(geometry, material);
+            cube.position.x += 2;
+            scene.add(cube);
+
+            const geo = computeTomography(geometry, {
+                y: { min: -1, max: 0 },
+                z: { min: -1, max: 0.7 },
             });
-
-            if (!geometry) return;
-            const g = (geometry as BufferGeometry).center();
-            g.computeBoundingBox();
-
-            cube = new Mesh(g, material);
-
+            cube = new Mesh(geo, material);
+            cube.position.x -= 2;
             controls.update();
 
             scene.add(cube);

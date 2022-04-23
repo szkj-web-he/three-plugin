@@ -354,11 +354,9 @@ const cSTLLoader = (url) => {
         loader.load(
             url,
             (geometry) => {
-                console.log({ geometry });
                 resolve(geometry);
             },
             (error) => {
-                console.log({ error });
                 reject(error);
             },
         );
