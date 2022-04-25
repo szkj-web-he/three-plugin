@@ -69,8 +69,9 @@ const Earth = () => {
 
         controls.update();
 
-        const renderer = new WebGLRenderer({ canvas: node });
+        const renderer = new WebGLRenderer({ canvas: node, antialias: true, alpha: true });
         renderer.setSize(w, h);
+        renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setClearColor(bg, 0);
 
         const animate = () => {
@@ -115,6 +116,16 @@ const Earth = () => {
 
     return (
         <div className="subContainer">
+            <div className="ipt_container">
+                <div className="pit">
+                    <div className="position_name">Pit (y)</div>
+                    <input type="number" className="position_ipt" />
+                </div>
+                <div className="yaw">
+                    <div className="position_name">Yaw (x</div>
+                    <input type="number" className="position_ipt" />
+                </div>
+            </div>
             <canvas ref={ref} className="canvas" />
         </div>
     );

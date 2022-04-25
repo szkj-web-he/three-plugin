@@ -43,17 +43,17 @@ const tabData = [
     },
     {
         title: 'Volume Selector',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./VolumeSelector')),
         id: 8,
     },
     {
         title: 'Curiosity Rover (Clean)',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./CuriosityRover(Clean)')),
         id: 9,
     },
     {
         title: 'Curiosity Rover (Dirty)',
-        element: React.lazy(() => import('./Earth')),
+        element: React.lazy(() => import('./CuriosityRover(Dirty)')),
         id: 10,
     },
 ];

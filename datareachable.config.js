@@ -2,7 +2,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.stl$/,
+                test: /\.(stl|obj|mtl)$/,
                 type: 'asset/resource',
             },
         ],
