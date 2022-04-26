@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
     Scene,
@@ -17,9 +17,14 @@ import die_stl from '../Die/Assets/die.stl';
 import { OrbitControls } from '../Unit/OrbitControls';
 import { BinarySTL } from '../Unit/binary';
 import room_stl from './Assets/room.stl';
-import { fetchFileBuffer } from '~/Unit/fetchFileBuffer';
+import { fetchFileBuffer } from '../Unit/fetchFileBuffer';
+import { nanCheck } from './Unit/nanCheck';
+import { updateBoxes } from './Unit/updateBoxes';
+import Operation from '../Operation/index';
 
 const HIGHLIGHT_BOX_SIZE = 1.1;
+
+const DEGREES = Math.PI / 180;
 
 interface Context {
     mesh: Mesh;
@@ -34,6 +39,10 @@ interface Context {
 
 const Temp = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
+    const [x, setX] = useState(0);
+    const [y, setY] = useState(0);
+
+    const ctxRef = useRef<Context>();
 
     useEffect(() => {
         const node = ref.current;
@@ -91,7 +100,6 @@ const Temp = () => {
         const animate = () => {
             timer = window.requestAnimationFrame(animate);
             controls.update();
-
             renderer.render(scene, camera);
         };
 
@@ -139,7 +147,7 @@ const Temp = () => {
                 r: renderer,
                 scene,
             };
-
+            ctxRef.current = { ...ctx };
             scene.add(ctx.mesh);
             scene.add(...ctx.highlight_boxes);
 
@@ -169,11 +177,54 @@ const Temp = () => {
             g.dispose();
             rootMesh?.removeFromParent();
             gMesh.removeFromParent();
+            ctxRef.current = undefined;
         };
     }, []);
 
+    useEffect(() => {
+        if (!ctxRef.current) return;
+        updateBoxes(
+            y,
+            x,
+            [ctxRef.current.mesh, ...ctxRef.current.highlight_boxes],
+            [null, ...ctxRef.current.highlight_box_locations],
+        );
+    }, [x, y]);
+
+    const stopE = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'e') {
+            e.preventDefault();
+        }
+    };
+
     return (
         <div className="subContainer">
+            <Operation
+                label={[
+                    {
+                        name: 'Pit (y)',
+                        onChange: (res) => {
+                            setY(nanCheck(Number.parseFloat(res)) * DEGREES);
+                        },
+                        step: 15,
+                        max: 90,
+                        min: -90,
+                        onKeyDown: stopE,
+                        defaultValue: y / DEGREES,
+                    },
+                    {
+                        name: 'Yaw (x)',
+                        onChange: (res) => {
+                            setX(nanCheck(Number.parseFloat(res)) * DEGREES);
+                        },
+                        step: 15,
+                        max: 180,
+                        min: -180,
+                        onKeyDown: stopE,
+                        defaultValue: x / DEGREES,
+                    },
+                ]}
+            />
             <canvas ref={ref} className="canvas" />
         </div>
     );

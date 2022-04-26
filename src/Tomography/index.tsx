@@ -17,7 +17,7 @@ import { OrbitControls } from '../Unit/OrbitControls';
 import { helper } from '../Unit/helper';
 import { computeTomography } from './Unit/computeTomography';
 import { BinarySTL } from '../Unit/binary';
-import { fetchFileBuffer } from '~/Unit/fetchFileBuffer';
+import { fetchFileBuffer } from '../Unit/fetchFileBuffer';
 
 const Temp = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);

@@ -115,6 +115,13 @@ body,
     border-radius: 6px;
     padding: 12px;
     box-sizing: border-box;
+    z-index: 50;
+    & > div {
+        margin-bottom: 12px;
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
 }
 
 .position_name {
@@ -126,19 +133,85 @@ body,
     font-family: $fontFamily;
 }
 
-.position_ipt {
+.position_iptContainer {
     width: 100%;
     box-sizing: border-box;
     border-radius: 4px;
     height: 32px;
+    overflow: hidden;
+    border: 1px solid #ebebeb;
+    padding: 0 12px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0 12px;
+    flex-flow: row nowrap;
+    position: relative;
+}
+
+.position_ipt {
+    height: 100%;
+    width: 100%;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
     color: #4d4d4d;
     font-size: 14px;
-    border: 1px solid #ebebeb;
+    border: 0;
     font-family: $fontFamily;
     letter-spacing: 0.25px;
-    z-index: 100;
+    outline: none;
+    appearance: none;
+    padding-right: 10px;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+.stepContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column nowrap;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    right: 10px;
+    z-index: 5;
+}
+
+.upIcon {
+    font-size: 7px;
+    flex: 0 0 auto;
+    color: #757575;
+    transform: rotate(180deg);
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: all 0.5s linear;
+    user-select: none;
+    &:hover {
+        color: #478da5;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
+
+.downIcon {
+    font-size: 7px;
+    flex: 0 0 auto;
+    color: #757575;
+    user-select: none;
+    cursor: pointer;
+    transition: all 0.5s linear;
+    &:hover {
+        color: #478da5;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
 }
