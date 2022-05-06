@@ -1,9 +1,3 @@
-/**
- * @file icon
- * @date 2021-08-09
- * @author xuejie.he
- * @lastModify xuejie.he 2021-08-09
- */
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 import React from 'react';

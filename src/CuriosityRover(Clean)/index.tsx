@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Color,
     DirectionalLight,
@@ -24,7 +24,7 @@ import { animation } from './Unit/animation';
 
 const RADIUS = 5;
 
-const Temp = () => {
+const Temp: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
     const [loading, setLoading] = useState(true);
 

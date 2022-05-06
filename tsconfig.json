@@ -1,13 +1,9 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
+        "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "strict": true,
@@ -15,31 +11,17 @@
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "isolatedModules": true,
+        "downlevelIteration": true,
         "noEmit": true,
-        "jsx": "react-jsx",
-        "noImplicitAny": false,
-        "typeRoots": [
-            "./types",
-            "node_modules/@types"
-        ],
-        "baseUrl": "src",
-        "paths": {
-            "~/*": [
-                "*"
-            ]
-        }
+        "jsx": "react",
+        "sourceMap": true,
+        "typeRoots": ["./types", "node_modules/@types"]
     },
     "plugins": [
         {
             "name": "typescript-tslint-plugin"
         }
     ],
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules",
-        "types"
-    ]
+    "include": ["src"],
+    "exclude": ["node_modules", "types"]
 }

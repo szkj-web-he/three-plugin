@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import {
     Scene,
@@ -17,7 +17,7 @@ import { STLLoader } from '../Unit/STLLoader.js';
 import die_stl from './Assets/die.stl';
 import { OrbitControls } from '../Unit/OrbitControls';
 
-const Temp = () => {
+const Temp: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {

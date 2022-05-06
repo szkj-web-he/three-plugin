@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Scene,
     PerspectiveCamera,
@@ -11,7 +11,7 @@ import {
 } from 'three';
 import { Cell, HEIGHT, MAP, WIDTH } from '../Unit/unit';
 
-const Temp = () => {
+const Temp: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
     const [c, setC] = useState<PerspectiveCamera>();
     const [m, setM] = useState<Mesh>();

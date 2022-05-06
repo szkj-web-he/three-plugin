@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import {
     Scene,
@@ -19,7 +19,7 @@ import { computeTomography } from './Unit/computeTomography';
 import { BinarySTL } from '../Unit/binary';
 import { fetchFileBuffer } from '../Unit/fetchFileBuffer';
 
-const Temp = () => {
+const Temp: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
     Scene,
     PerspectiveCamera,
@@ -12,7 +12,7 @@ import { OrbitControls } from '../Unit/OrbitControls';
 import { handleKeyDown } from './Unit/handleKeydown';
 import { Cell, HEIGHT, MAP, WIDTH } from '../Unit/unit';
 
-const Temp = () => {
+const Temp: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
     Scene,
     PerspectiveCamera,
@@ -10,7 +10,7 @@ import {
     PointLight,
 } from 'three';
 import { OrbitControls } from '../Unit/OrbitControls';
-const Temp = () => {
+const Temp: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const Temp = () => {
         let timer: number | null = null;
         let timerOut: number | null = null;
         //创建加载器
-        const renderer = new WebGLRenderer({ canvas: node });
+        const renderer = new WebGLRenderer({ canvas: node, antialias: true, alpha: true });
         //创建背景色
         const bg = new Color('rgb(0, 0, 0)');
         //创建图形

@@ -61,14 +61,14 @@ const tabData = [
 const Main: React.FC = () => {
     const [selectData, setSelectData] = useState<{
         title: string;
-        element: React.LazyExoticComponent<() => JSX.Element>;
+        element: React.LazyExoticComponent<React.FC>;
         id: number;
     }>();
 
     useLayoutEffect(() => {
         let data: {
             title: string;
-            element: React.LazyExoticComponent<() => JSX.Element>;
+            element: React.LazyExoticComponent<React.FC>;
             id: number;
         };
         if (window.location.search.includes('?')) {

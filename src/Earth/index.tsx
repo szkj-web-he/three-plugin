@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import atmos from './Assets/earth_atmos_2048.jpg';
 import specular from './Assets/earth_specular_2048.jpg';
@@ -31,7 +31,7 @@ interface Context {
     controls: OrbitControls;
 }
 
-const Earth = () => {
+const Earth: React.FC = () => {
     const ref = useRef<HTMLCanvasElement | null>(null);
     const [lat, setLat] = useState<null | number>(null);
     const [lng, setLng] = useState<null | number>(null);
